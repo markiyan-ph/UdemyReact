@@ -28,6 +28,7 @@ export default class App extends Component {
         this.addItem = this.addItem.bind(this);
         this.onToggleImportant = this.onToggleImportant.bind(this);
         this.onToggleDone = this.onToggleDone.bind(this);
+        this.filterData = this.filterData.bind(this);
         this.onSearch = this.onSearch.bind(this);
     }
 
@@ -44,6 +45,10 @@ export default class App extends Component {
     addItem(text) {
         let newItem = this.createTodoItem(text);
 
+        if (text.trim().length === 0) {
+            return;
+        }
+        
         this.setState(({ todoData }) => {
             return {
                 todoData: [...todoData, newItem],
@@ -83,41 +88,19 @@ export default class App extends Component {
     }
 
     onSearch(text) {
-        let searchText = text.target.value;
+        this.setState({ filterLabel: text });
+    }
 
-        this.setState(({ todoData }) => {
-            const filterLabel = searchText;
+    filterData(todoData, text) {
 
-            if (searchText.length > 0) {
+        if (text === '') {
+            return todoData;
+        }
 
-                searchText = searchText.toLowerCase().trim();
+        const searchText = text.toLowerCase().trim();
+        const filtered = todoData.filter((el) => el.label.toLowerCase().includes(searchText));
 
-                const filtered = todoData.map((el) => {
-                    if (el.label.toLowerCase().indexOf(searchText) === -1) {
-                        el.showItem = false;
-                        return el;
-                    }
-
-                    el.showItem = true;
-                    return el;
-                });
-
-                return {
-                    todoData: filtered,
-                    filterLabel: filterLabel
-                };
-            } else {
-                const filtered = todoData.map((el) => {
-                    el.showItem = true;
-                    return el;
-                });
-
-                return {
-                    filterLabel: '',
-                    todoData: filtered
-                };
-            }
-        });
+        return filtered;
     }
 
     deleteItem(id) {
@@ -139,23 +122,25 @@ export default class App extends Component {
     }
 
     render() {
-        const { todoData } = this.state;
+        const { todoData, filterLabel } = this.state;
         const doneCount = todoData.filter((el) => el.done === true);
         const todoCount = todoData.length - doneCount.length;
+
+        const filteredData = this.filterData(todoData, filterLabel);
 
         return (
             <div className='container mt-5'>
                 <AppHeader toDo={todoCount} done={doneCount.length} />
                 <div className="top-panel d-flex">
-                    <SearchPanel onSearch = { this.onSearch } searchValue = { this.state.filterLabel } />
+                    <SearchPanel onSearch = { this.onSearch } />
                     <ItemStatusFilter />
                 </div>
                 <TodoList
-                    todos = { todoData }
-                    onDeleted = { this.deleteItem }
-                    onToggleImportant = { this.onToggleImportant }
-                    onToggleDone = { this.onToggleDone } />
-                <AddItem onAddItem = { this.addItem } />
+                    todos={filteredData}
+                    onDeleted={this.deleteItem}
+                    onToggleImportant={this.onToggleImportant}
+                    onToggleDone={this.onToggleDone} />
+                <AddItem onAddItem={this.addItem} />
             </div>
         );
     }
