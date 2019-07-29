@@ -12,14 +12,34 @@ export default class ItemStatusFilter extends Component {
             selectActive: false,
             selectDone: false
         };
+
+        this.buttons = [
+            { name: 'all', label: 'All' },
+            { name: 'active', label: 'Active' },
+            { name: 'done', label: 'Done' },
+        ];
     }
 
     render() {
+        const { filter, onFilterClick } = this.props;
+
+        const filterButtons = this.buttons.map(({ name, label }) => {
+            const isActive = filter === name;
+            const activeClass = `btn ${isActive ? 'btn-info' : 'btn-outline-secondary'}`;
+
+            return (
+                <button type="button"
+                    className={activeClass}
+                    key={name}
+                    onClick={() => onFilterClick(name)}>
+                    {label}
+                </button>
+            );
+        });
+
         return (
             <div className="btn-group">
-                <button type="button" className = {`btn ${this.state.selectAll ? 'btn-info' : 'btn-outline-secondary'}`}>All</button>
-                <button type="button" className= {`btn ${this.state.selectActive ? 'btn-info' : 'btn-outline-secondary'}`}>Active</button>
-                <button type="button" className= {`btn ${this.state.selectDone ? 'btn-info' : 'btn-outline-secondary'}`}>Done</button>
+                {filterButtons}
             </div>
         );
     }

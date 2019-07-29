@@ -21,15 +21,17 @@ export default class App extends Component {
                 this.createTodoItem('Make Awesome App'),
                 this.createTodoItem('Have a lunch')
             ],
-            filterLabel: ''
+            filterLabel: '',
+            filter: 'all' // active, all, done
         };
 
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);
         this.onToggleImportant = this.onToggleImportant.bind(this);
         this.onToggleDone = this.onToggleDone.bind(this);
-        this.filterData = this.filterData.bind(this);
+        this.searchData = this.searchData.bind(this);
         this.onSearch = this.onSearch.bind(this);
+        this.onFilterClick = this.onFilterClick.bind(this);
     }
 
     createTodoItem(label) {
@@ -48,7 +50,7 @@ export default class App extends Component {
         if (text.trim().length === 0) {
             return;
         }
-        
+
         this.setState(({ todoData }) => {
             return {
                 todoData: [...todoData, newItem],
@@ -91,7 +93,11 @@ export default class App extends Component {
         this.setState({ filterLabel: text });
     }
 
-    filterData(todoData, text) {
+    onFilterClick(name) {
+        this.setState({ filter: name });
+    }
+
+    searchData(todoData, text) {
 
         if (text === '') {
             return todoData;
@@ -101,6 +107,19 @@ export default class App extends Component {
         const filtered = todoData.filter((el) => el.label.toLowerCase().includes(searchText));
 
         return filtered;
+    }
+
+    filterData(todoData, filter) {
+        switch (filter) {
+            case 'all':
+                return todoData;
+            case 'active':
+                return todoData.filter((item) => !item.done);
+            case 'done':
+                return todoData.filter((item) => item.done);
+            default:
+                return todoData;
+        }
     }
 
     deleteItem(id) {
@@ -122,18 +141,20 @@ export default class App extends Component {
     }
 
     render() {
-        const { todoData, filterLabel } = this.state;
+        const { todoData, filterLabel, filter } = this.state;
         const doneCount = todoData.filter((el) => el.done === true);
         const todoCount = todoData.length - doneCount.length;
 
-        const filteredData = this.filterData(todoData, filterLabel);
+        const filteredData = this.filterData(this.searchData(todoData, filterLabel), filter);
 
         return (
             <div className='container mt-5'>
                 <AppHeader toDo={todoCount} done={doneCount.length} />
                 <div className="top-panel d-flex">
-                    <SearchPanel onSearch = { this.onSearch } />
-                    <ItemStatusFilter />
+                    <SearchPanel onSearch={this.onSearch} />
+                    <ItemStatusFilter
+                        filter={filter}
+                        onFilterClick={this.onFilterClick} />
                 </div>
                 <TodoList
                     todos={filteredData}
