@@ -1,2 +1,5 @@
 UdemyExamples/.DS_Store
 react-apps/.DS_Store
+react-apps/star-db/package-lock.json
+react-apps/todo/package-lock.json
+package-lock.json
