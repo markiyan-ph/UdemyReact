@@ -6,6 +6,19 @@ import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 import ErrorButton from '../error-button';
 
+const Record = ({ item, field, label }) => {
+    return (
+        <li className="list-group-item">
+            <span className="term">{label}</span>
+            <span>{item[field]}</span>
+        </li>
+    );
+};
+
+export {
+    Record
+};
+
 export default class ItemDetails extends Component {
 
     swapiService = new SwapiService();
@@ -13,7 +26,8 @@ export default class ItemDetails extends Component {
     state = {
         item: null,
         loading: false,
-        hasError: false
+        hasError: false,
+        imgUrl: ''
     };
 
     componentDidMount() {
@@ -27,7 +41,7 @@ export default class ItemDetails extends Component {
     }
 
     updateItem() {
-        const { itemId } = this.props;
+        const { itemId, getData, getImg } = this.props;
 
         if (!itemId) {
             return;
@@ -37,13 +51,13 @@ export default class ItemDetails extends Component {
             loading: true
         });
 
-        this.swapiService
-            .getPerson(itemId)
+        getData(itemId)
             .then((item) => {
                 this.setState({
                     item,
                     loading: false,
-                    hasError: false
+                    hasError: false,
+                    imgUrl: getImg(item)
                 });
             })
             .catch(() => {
@@ -57,15 +71,23 @@ export default class ItemDetails extends Component {
 
     render() {
 
-        if (!this.state.item) {
+        const { loading, hasError, item } = this.state;
+
+        if (!item) {
             return <span>Select an person from a list</span>;
         }
 
-        const { loading, hasError } = this.state;
-        
+
         const spinner = loading ? <Spinner /> : null;
         const errorMessage = hasError ? <ErrorIndicator /> : null;
-        const content = (!loading && !hasError) ? <ItemView item={this.state.item} /> : null;
+        const content = (!loading && !hasError) ? <ItemView
+            item={this.state.item} img={this.state.imgUrl}
+            records={
+                React.Children.map(this.props.children, (child) => {
+                    return React.cloneElement(child, { item });
+                })
+            }
+        /> : null;
 
         return (
             <div className="item-details card">
@@ -77,30 +99,19 @@ export default class ItemDetails extends Component {
     }
 }
 
-const ItemView = ({ item }) => {
-    const { id, name, gender, birthYear, eyeColor } = item;
+const ItemView = ({ item, img, records }) => {
+    const { name } = item;
 
     return (
         <React.Fragment>
             <img className="item-image"
                 alt=""
-                src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`} />
+                src={img} />
 
             <div className="card-body">
                 <h4>{name}</h4>
                 <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                        <span className="term">Gender</span>
-                        <span>{gender}</span>
-                    </li>
-                    <li className="list-group-item">
-                        <span className="term">Birth Year</span>
-                        <span>{birthYear}</span>
-                    </li>
-                    <li className="list-group-item">
-                        <span className="term">Eye Color</span>
-                        <span>{eyeColor}</span>
-                    </li>
+                    {records}
                 </ul>
                 <ErrorButton />
             </div>
