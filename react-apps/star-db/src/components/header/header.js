@@ -2,7 +2,7 @@ import React from 'react';
 
 import './header.css';
 
-const Header = () => {
+const Header = ({ onServiceChange }) => {
     const menuItems = [
         { title: 'People', link: '#' },
         { title: 'Planets', link: '#' },
@@ -28,6 +28,11 @@ const Header = () => {
             </h3>
             <ul className="d-flex">
                 {menu}
+                <button
+                    className="btn btn-primary btn-sm"
+                    onClick={onServiceChange}>
+                    Change service
+                </button>
             </ul>
         </div>
     );

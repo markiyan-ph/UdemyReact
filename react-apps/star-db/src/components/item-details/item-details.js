@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import './item-details.css';
-import SwapiService from '../../services/swapi-service';
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 import ErrorButton from '../error-button';
@@ -21,7 +20,7 @@ export {
 
 export default class ItemDetails extends Component {
 
-    swapiService = new SwapiService();
+    // swapiService = new SwapiService();
 
     state = {
         item: null,
@@ -34,8 +33,12 @@ export default class ItemDetails extends Component {
         this.updateItem();
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.itemId !== prevProps.itemId) {
+    componentDidUpdate(prevProps) {        
+        if (
+            this.props.itemId !== prevProps.itemId || 
+            this.props.getData !== prevProps.getData ||
+            this.props.getImg !== prevProps.getImg
+        ) {
             this.updateItem();
         }
     }
@@ -48,7 +51,8 @@ export default class ItemDetails extends Component {
         }
 
         this.setState({
-            loading: true
+            loading: true,
+            hasError: false
         });
 
         getData(itemId)
