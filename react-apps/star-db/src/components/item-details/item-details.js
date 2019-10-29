@@ -24,7 +24,7 @@ export default class ItemDetails extends Component {
 
     state = {
         item: null,
-        loading: false,
+        loading: true,
         hasError: false,
         imgUrl: ''
     };
@@ -33,9 +33,9 @@ export default class ItemDetails extends Component {
         this.updateItem();
     }
 
-    componentDidUpdate(prevProps) {        
+    componentDidUpdate(prevProps) {
         if (
-            this.props.itemId !== prevProps.itemId || 
+            this.props.itemId !== prevProps.itemId ||
             this.props.getData !== prevProps.getData ||
             this.props.getImg !== prevProps.getImg
         ) {
@@ -47,6 +47,9 @@ export default class ItemDetails extends Component {
         const { itemId, getData, getImg } = this.props;
 
         if (!itemId) {
+            this.setState({
+                loading: false
+            });
             return;
         }
 
@@ -77,11 +80,6 @@ export default class ItemDetails extends Component {
 
         const { loading, hasError, item } = this.state;
 
-        if (!item) {
-            return <span>Select an person from a list</span>;
-        }
-
-
         const spinner = loading ? <Spinner /> : null;
         const errorMessage = hasError ? <ErrorIndicator /> : null;
         const content = (!loading && !hasError) ? <ItemView
@@ -93,9 +91,20 @@ export default class ItemDetails extends Component {
             }
         /> : null;
 
+        if (loading) {
+            return (
+                <div className="item-details card">
+                    {spinner}
+                </div>
+            );
+        }
+        
+        if (!item) {
+            return <span>Select an person from a list</span>;
+        }
+
         return (
             <div className="item-details card">
-                {spinner}
                 {errorMessage}
                 {content}
             </div>

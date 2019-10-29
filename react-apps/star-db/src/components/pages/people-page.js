@@ -23,5 +23,5 @@ export default class PeoplePage extends Component {
                 right={<PersonDetails itemId={selectedItem} />}
             />
         );
-    };
+    }
 }

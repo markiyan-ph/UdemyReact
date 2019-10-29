@@ -29,7 +29,7 @@ const mapMethodsToProps = (swapiService, object) => {
     return objectMap[object];
 };
 
-const withSwapiSevice = (Wrapped, object) => {
+const withSwapiSevice = (object) => (Wrapped) => {
     return (props) => {
         return (
             <SwapiServiceConsumer>

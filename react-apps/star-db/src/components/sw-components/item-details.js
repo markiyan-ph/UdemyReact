@@ -31,9 +31,9 @@ const StarhipDetails = (props) => {
     );
 };
 
-const personDetails = withSwapiSevice(PersonDetails, 'person');
-const planetDetails = withSwapiSevice(PlanetDetails, 'planet');
-const starhipDetails = withSwapiSevice(StarhipDetails, 'starship');
+const personDetails = withSwapiSevice('person')(PersonDetails);
+const planetDetails = withSwapiSevice('planet')(PlanetDetails);
+const starhipDetails = withSwapiSevice('starship')(StarhipDetails);
 
 export {
     personDetails as PersonDetails,

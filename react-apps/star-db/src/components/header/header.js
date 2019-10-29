@@ -4,9 +4,9 @@ import './header.css';
 
 const Header = ({ onServiceChange }) => {
     const menuItems = [
-        { title: 'People', link: '#' },
-        { title: 'Planets', link: '#' },
-        { title: 'Starships', link: '#' }
+        { title: 'People', link: '#/people' },
+        { title: 'Planets', link: '#/planets' },
+        { title: 'Starships', link: '#/starships' }
     ];
 
     const menu = menuItems.map((menuItem) => {
@@ -22,7 +22,7 @@ const Header = ({ onServiceChange }) => {
     return (
         <div className="header d-flex">
             <h3>
-                <a href="#">
+                <a href="/#">
                     Star DB
                 </a>
             </h3>
