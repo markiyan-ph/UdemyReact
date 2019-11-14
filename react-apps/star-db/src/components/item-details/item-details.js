@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-
-import './item-details.css';
-import Spinner from '../spinner';
-import ErrorIndicator from '../error-indicator';
+import { withRouter } from 'react-router-dom';
 import ErrorButton from '../error-button';
+import ErrorIndicator from '../error-indicator';
+import Spinner from '../spinner';
+import './item-details.css';
 
 const Record = ({ item, field, label }) => {
     return (
@@ -14,11 +14,9 @@ const Record = ({ item, field, label }) => {
     );
 };
 
-export {
-    Record
-};
+export { Record };
 
-export default class ItemDetails extends Component {
+class ItemDetails extends Component {
 
     // swapiService = new SwapiService();
 
@@ -83,6 +81,7 @@ export default class ItemDetails extends Component {
         const spinner = loading ? <Spinner /> : null;
         const errorMessage = hasError ? <ErrorIndicator /> : null;
         const content = (!loading && !hasError) ? <ItemView
+            {...this.props}
             item={this.state.item} img={this.state.imgUrl}
             records={
                 React.Children.map(this.props.children, (child) => {
@@ -98,7 +97,7 @@ export default class ItemDetails extends Component {
                 </div>
             );
         }
-        
+
         if (!item) {
             return <span>Select an person from a list</span>;
         }
@@ -112,14 +111,19 @@ export default class ItemDetails extends Component {
     }
 }
 
-const ItemView = ({ item, img, records }) => {
-    const { name } = item;
+const ItemView = ({ item, img, records, detailed, history }) => {
+    const { id, name } = item;
+
+    const detailsButn = detailed ? null : <DetailsBtn itemId={id} history={history} />;
 
     return (
         <React.Fragment>
-            <img className="item-image"
-                alt=""
-                src={img} />
+            <div className="item-image text-center">
+                <img width="100%"
+                    alt=""
+                    src={img} />
+                {detailsButn}
+            </div>
 
             <div className="card-body">
                 <h4>{name}</h4>
@@ -131,3 +135,17 @@ const ItemView = ({ item, img, records }) => {
         </React.Fragment>
     );
 };
+
+const DetailsBtn = ({itemId, history}) => {
+    return (
+        <button className="btn btn-primary mt-2"
+            onClick={() => {
+                history.push(`${itemId}/detailed`);
+            }}
+        >
+            Details
+        </button>
+    );
+};
+
+export default withRouter(ItemDetails);

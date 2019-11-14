@@ -1,12 +1,13 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import './header.css';
+
 
 const Header = ({ onServiceChange }) => {
     const menuItems = [
-        { title: 'People', link: '#/people' },
-        { title: 'Planets', link: '#/planets' },
-        { title: 'Starships', link: '#/starships' }
+        { title: 'People', link: '/people/' },
+        { title: 'Planets', link: '/planets/' },
+        { title: 'Starships', link: '/starships/' }
     ];
 
     const menu = menuItems.map((menuItem) => {
@@ -14,7 +15,7 @@ const Header = ({ onServiceChange }) => {
 
         return (
             <li key={title}>
-                <a href={link}>{title}</a>
+                <Link to={link}>{title}</Link>
             </li>
         );
     });
@@ -22,9 +23,7 @@ const Header = ({ onServiceChange }) => {
     return (
         <div className="header d-flex">
             <h3>
-                <a href="/#">
-                    Star DB
-                </a>
+                <Link to='/' >Star DB</Link>
             </h3>
             <ul className="d-flex">
                 {menu}

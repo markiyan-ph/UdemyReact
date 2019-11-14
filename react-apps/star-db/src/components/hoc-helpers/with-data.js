@@ -45,7 +45,13 @@ const withData = (View) => {
             const { data, loading, error } = this.state;
 
             if (loading) {
-                return <Spinner />;
+                return (
+                    <ul className="item-list list-group">
+                        <li className="list-group-item d-flex justify-content-center">
+                            <Spinner />
+                        </li>
+                    </ul>
+                );
             }
 
             if (error) {

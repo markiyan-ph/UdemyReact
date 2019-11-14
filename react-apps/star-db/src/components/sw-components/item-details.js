@@ -23,7 +23,7 @@ const PlanetDetails = (props) => {
 
 const StarhipDetails = (props) => {
     return (
-        <ItemDetails {...props} >
+        <ItemDetails {...props}  >
             <Record field='model' label='Model' />
             <Record field='length' label='Length' />
             <Record field='costInCredits' label='Cost' />
@@ -32,7 +32,7 @@ const StarhipDetails = (props) => {
 };
 
 const personDetails = withSwapiSevice('person')(PersonDetails);
-const planetDetails = withSwapiSevice('planet')(PlanetDetails);
+const planetDetails = withSwapiSevice('planet')(PlanetDetails); 
 const starhipDetails = withSwapiSevice('starship')(StarhipDetails);
 
 export {
