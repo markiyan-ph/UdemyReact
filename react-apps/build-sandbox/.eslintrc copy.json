@@ -19,7 +19,7 @@
     "indent": ["error", 4, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
     // "quotes": ["error", "single"],
-    "semi": ["warn", "always"],
+    "semi": ["error", "always"],
     "react/prop-types": 0,
     "react/display-name": 0
   }

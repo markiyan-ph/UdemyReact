@@ -1,0 +1,18 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "debug": true,
+        "targets": [
+          "last 2 chrome versions",
+          "last 2 firefox versions",
+          "last 2 ios versions",
+          "> 0.3%"
+        ]
+      }
+    ],
+    "@babel/react"
+  ],
+  "plugins": ["@babel/plugin-proposal-class-properties"]
+}
