@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const App = () => <h1>Hello world</h1>;
+import './main.scss';
+
+const App = () => <h1>This is WebPack React App</h1>;
 
 ReactDOM.render(<App />, document.getElementById('root'));
